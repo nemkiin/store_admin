@@ -53,7 +53,8 @@ loadDataCat();
         //prevent Default functionality
         e.preventDefault();
         let dataVal = $('input#inpCat').val();
-        $.ajax({
+        if(dataVal.length>0){
+            $.ajax({
                 url: 'http://localhost:2403/categories/',
                 type: 'post',
                 data: {name : dataVal},
@@ -61,6 +62,8 @@ loadDataCat();
                   loadDataCat();
                 }
         });
+        }
+       
 
     });
 
@@ -71,8 +74,7 @@ loadDataCat();
         let dataPrice = $('input#priceProd').val();
         let dataDescrip = $('input#descripProd').val();
         let dataSelect = $('#selectCat').val();
-        if(dataName.length>0){
-            console.log(1);
+        if(dataName.length>0 && dataPrice.length>0){
             $.ajax({
                 url: 'http://localhost:2403/products/',
                 type: 'post',
