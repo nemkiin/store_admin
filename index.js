@@ -15,7 +15,7 @@ $.get('http://localhost:2403/categories/',function(data){
     for(let i =0; i < data.length; i++){
         let numProd = i +1;
         $('tbody#catTable').append('<tr><td>' + numProd +'</td>\
-        <td  class="editTd">'+ data[i].name +'</td>\
+        <td data-id="'+data[i].id+'" class="editTd">'+ data[i].name +'</td>\
         <td><button class="btn btn-danger deleteTr" type="submit">DELETE</button>\
         <button class="btn btn-default editTr" type="submit">EDIT</button></td></tr>');
         $('#selectCat').append('<option value="'+data[i].id+'">'+ data[i].name +'</option>')
@@ -88,12 +88,13 @@ loadDataCat();
                 }
         });
         }
-        
-           
-        
-    
-
     });
+
+//delete button categories
+$('body').on('click','.deleteTr',function(event){
+    $(event.target).parent('td').parent('tr').remove();
+    console.log(123);
+})
 
 
 
