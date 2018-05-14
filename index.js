@@ -22,20 +22,23 @@ $.get('http://localhost:2403/categories/',function(data){
     }
 })
 $.get('http://localhost:2403/products/', function(products){
-    $('tbody#prodTable').html('');
-    //$('form#formProd').val('');
-    for(let e =0; e< products.length; e++){
-        // console.log(data[e].category);
-        product=products[e];
+    $('#prodTable').html('');
+    for(let i =0; i< products.length; i++){
+        
+        product=products[i];
         var category=categories.find(function(c){return c.id===product.category});
         $('tbody#prodTable').append('\
-         <tr>\
-        <td>'+  e +'</td>\
-        <td>' + products[e].name +'</td>\
-        <td>'+ products[e].price +'</td>\
-        <td>'+  products[e].description +'</td>\
-        <td>'+ category.name +'</td>\
-        <td>' )
+                <tr>\
+                <td>'+  i +'</td>\
+                <td>' + products[i].name +'</td>\
+                <td>'+ products[i].price +'</td>\
+                <td>'+  products[i].description +'</td>\
+                <td>'+ category.name +'</td>\
+                <td>\
+                <button class="btn btn-danger deleteTr" type="submit">DELETE</button>\
+                <button class="btn btn-default editTr" type="submit">EDIT</button>\
+                </td>\
+                </tr>' )
     }
 })
 
