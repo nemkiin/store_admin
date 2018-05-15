@@ -9,37 +9,45 @@ $.get('http://localhost:2403/categories/',function(data){
     categories=data;
     // очистка таблицы
     $('tbody#catTable').html('');
+    $('#selectCat').html('');
     // очистка поля
     $('input#inpCat').val('');
     //data[1].name;
     for(let i =0; i < data.length; i++){
         let numProd = i +1;
-        $('tbody#catTable').append('<tr><td>' + numProd +'</td>\
-        <td data-id="'+data[i].id+'" class="editTd">'+ data[i].name +'</td>\
-        <td><button class="btn btn-danger deleteTr" type="submit">DELETE</button>\
-        <button class="btn btn-default editTr" type="submit">EDIT</button></td></tr>');
+        $('tbody#catTable').append('<tr data-id="'+data[i].id+'"><td>' + numProd +'</td>\
+        <td class="editTd">'+ data[i].name +'</td>\
+        <td><button class="btn btn-danger deleteTr" >DELETE</button>\
+        <button class="btn btn-default editTr">EDIT</button></td></tr>');
         $('#selectCat').append('<option value="'+data[i].id+'">'+ data[i].name +'</option>')
     }
 })
+
 $.get('http://localhost:2403/products/', function(products){
     $('#prodTable').html('');
     for(let i =0; i< products.length; i++){
         
         product=products[i];
         var category=categories.find(function(c){return c.id===product.category});
+        //console.log(category);
+        
         $('tbody#prodTable').append('\
-                <tr>\
+                <tr data-id="' +product.id + ' ">\
                 <td>'+  i +'</td>\
                 <td>' + products[i].name +'</td>\
                 <td>'+ products[i].price +'</td>\
                 <td>'+  products[i].description +'</td>\
                 <td>'+ category.name +'</td>\
                 <td>\
-                <button class="btn btn-danger deleteTr" type="submit">DELETE</button>\
-                <button class="btn btn-default editTr" type="submit">EDIT</button>\
+                <button class="btn btn-danger deleteTr" >DELETE</button>\
+                <button class="btn btn-default editTr" >EDIT</button>\
                 </td>\
                 </tr>' )
+            
+              //  category.name 
     }
+    // console.log(category.name);
+
 })
 
 }
@@ -70,9 +78,9 @@ loadDataCat();
     $("#formProd").submit(function(e) {
         //prevent Default functionality
         e.preventDefault();
-        let dataName = $('input#nameProd').val();
-        let dataPrice = $('input#priceProd').val();
-        let dataDescrip = $('input#descripProd').val();
+        let dataName = $('#nameProd').val();
+        let dataPrice = $('#priceProd').val();
+        let dataDescrip = $('#descripProd').val();
         let dataSelect = $('#selectCat').val();
         if(dataName.length>0 && dataPrice.length>0){
             $.ajax({
@@ -90,11 +98,25 @@ loadDataCat();
         }
     });
 
-//delete button categories
-$('body').on('click','.deleteTr',function(event){
-    $(event.target).parent('td').parent('tr').remove();
-    console.log(123);
-})
+
+$('body').on('click','.deleteTr',(function(e){
+    let trId = $(e.target).parents('tr').data('id');
+    console.log(trId);
+    $.ajax({
+        url: 'http://localhost:2403/categories/'+ trId,
+        type: 'DELETE',
+        success: function(result){
+            loadDataCat();
+        }
+    })
+    $.ajax({
+        url: 'http://localhost:2403/products/'+ trId,
+        type: 'DELETE',
+        success: function(result){
+            loadDataCat();
+        }
+    })
+}))
 
 
 
@@ -111,39 +133,5 @@ $(function reloadCategory(){
         $('.products').hide();
     })
 })
-
-//reloadCategory();
-
-// $('button#addCat.btn.btn-default').click(function(a){
-//     let countTr = $('table.table tr').length;
-//     //console.log(countTr);
-//     let valInput = $('input#inpCat.inpCategories').val();
-//     //console.log(valInput);
-//     if(valInput != ''){
-//         $('tbody#catTable').append('<tr><td>' + countTr +'</td><td  class="editTd">'+ valInput +'</td><td><button class="btn btn-danger deleteTr" type="submit">DELETE</button><button class="btn btn-default editTr" type="submit">EDIT</button></td></tr>');
-//         //$('input#inpCat.inpCategories').val('');
-//     }
-// })
-
-// //delete button-------------
-// $('body').on('click','button.deleteTr', function(event){
-//     $(event.target).parents('tr').remove();
-// })
-
-// //edit button
-// $('body').on('click', 'button.editTr',function(event){
-//     console.log('edit');
-//     $(event.target).find('td.editTd').addClass('test');
-// })
-
-
-
-
-
-
-
-
-
-
 
 })
