@@ -22,7 +22,7 @@ $.get('http://localhost:2403/categories/',function(data){
         $('tbody#catTable').append('<tr data-id="'+data[i].id+'"><td>' + numProd +'</td>\
         <td class="editCatName">'+ data[i].name +'</td>\
         <td><button class="btn btn-danger deleteTr" >DELETE</button>\
-        <button class="btn btn-default editTr">EDIT</button></td></tr>');
+        <button class="btn btn-default editTrCat">EDIT</button></td></tr>');
         $('#selectCat').append('<option value="'+data[i].id+'">'+ data[i].name +'</option>')
     }
 })
@@ -73,7 +73,7 @@ $('body').on('change', '.inputEditNew', function(e){
 //console.log(newValueInput);
 })
 //function editing categories
-$('body').on('click', '.editTr', function(e){
+$('body').on('click', '.editTrCat', function(e){
     let trId = $(e.target).parents('tr').data('id');
     $.get('http://localhost:2403/categories/'+ trId, function(event){
             //console.log(event.name);
