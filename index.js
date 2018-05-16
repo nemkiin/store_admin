@@ -16,6 +16,7 @@ $.get('http://localhost:2403/categories/',function(data){
     $('#priceProd').val('');
     $('#descripProd').val('');
     //data[1].name;
+    
     for(let i =0; i < data.length; i++){
         let numProd = i +1;
         $('tbody#catTable').append('<tr data-id="'+data[i].id+'"><td>' + numProd +'</td>\
@@ -55,16 +56,35 @@ $.get('http://localhost:2403/products/', function(products){
 })
 
 }
+$('body').on('change', '.inputEditNew', function(e){
 
+    let newValueInput= $('.inputEditNew').val();
+    var trId = $('.inputEditNew').parents('tr').data('id');
+    if(newValueInput.length>0){
+        $.ajax({
+            url: 'http://localhost:2403/categories/'+ trId,
+            type: 'PUT',
+            data: {name : newValueInput},
+            success: function(){
+                loadDataCat();
+            }
+        })
+    }
+//console.log(newValueInput);
+})
 //function editing categories
 $('body').on('click', '.editTr', function(e){
     let trId = $(e.target).parents('tr').data('id');
-    $(e.target).parents('tr').html('<td></td><td><input class="1234"></td><td><button class="btn btn-danger deleteTr" >DELETE</button><button class="btn btn-success">Save</button></td>')
-    //$('.1234').blur();
-    console.log(trId);
-    $.get('http://localhost:2403/categories/', function(product){
-            console.log(product);
+    $.get('http://localhost:2403/categories/'+ trId, function(event){
+            //console.log(event.name);
+            $(e.target).parents('tr').html('<td></td>\
+    <td><input class="inputEditNew" value="'+event.name+'"></td>\
+    <td><button class="btn btn-danger deleteTr" >DELETE</button>\
+    <button class="btn btn-success">Save</button></td>');
+    
+    
     })
+    
     
 })
 
